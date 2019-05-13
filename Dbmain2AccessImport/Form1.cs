@@ -30,6 +30,7 @@ namespace Dbmain2AccessImport
 
             typeReplacement.Add("-- Sequence attribute not implemented --", "autoincrement");
             typeReplacement.Add("short", "long");
+            typeReplacement.Add("\u001f", "");//strange underscore found...
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -47,6 +48,7 @@ namespace Dbmain2AccessImport
         private void btnAnalyser_Click(object sender, EventArgs e)
         {
             importStatements.Clear();
+            pnlResult.Controls.Clear();
 
 
             if (txtSource.Text != "")
@@ -80,19 +82,19 @@ namespace Dbmain2AccessImport
 
                 for (int statementCount = 0; statementCount < statements.Length - 1; statementCount++)
                 {
-
+                    string statement = statements[statementCount];
                     Label label = new Label();
 
                     label.Location = new Point(currentX, currentY);
-                    label.Text = String.Join(" ", statements[statementCount].Split(' ').Take(3));
+                    label.Text = String.Join(" ", statement.Split(' ').Take(3))+" ...";
                     label.Width = 250;
 
                     CheckBox checkBox = new CheckBox();
-                    checkBox.Location = new Point(currentX + label.Width + 15, currentY);
-                    checkBox.Checked = true;
+                    checkBox.Location = new Point(currentX + label.Width + 7, currentY);
+                    checkBox.Checked = IsConsideredACompatibleStatement(statement);
                     checkBox.Tag = "cb-" + statementCount;
 
-                    importStatements.Add(statements[statementCount]);
+                    importStatements.Add(statement);
 
 
                     this.pnlResult.Controls.Add(label);
@@ -108,6 +110,12 @@ namespace Dbmain2AccessImport
                     btnImport.Enabled = true;
 
             }
+        }
+
+        private Boolean IsConsideredACompatibleStatement(string statement)
+        {
+            string lstatement = statement.ToLower();
+            return lstatement.StartsWith("create") || lstatement.StartsWith("alter");
         }
 
         private void btnImport_Click(object sender, EventArgs e)
@@ -151,7 +159,7 @@ namespace Dbmain2AccessImport
             }
             else
             {
-                MessageBox.Show(this,String.Join("\n",errors.ToArray()), "Des erreurs sont survenues, opération annulée (vous pouvez décocher l'instruction et rééssayer)");
+                MessageBox.Show(this,"Les requêtes suivantes ont échoué (vous pouvez réessayer en décochant les instructions problématiques) :\n\n"+String.Join("\n\n",errors.ToArray()), "Erreurs");
             }
         }
 
