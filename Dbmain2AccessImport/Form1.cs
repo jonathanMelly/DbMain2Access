@@ -47,6 +47,7 @@ namespace Dbmain2AccessImport
         private void btnAnalyser_Click(object sender, EventArgs e)
         {
             importStatements.Clear();
+            pnlResult.Controls.Clear();
 
 
             if (txtSource.Text != "")
@@ -84,11 +85,11 @@ namespace Dbmain2AccessImport
                     Label label = new Label();
 
                     label.Location = new Point(currentX, currentY);
-                    label.Text = String.Join(" ", statements[statementCount].Split(' ').Take(3));
+                    label.Text = String.Join(" ", statements[statementCount].Split(' ').Take(3))+" ...";
                     label.Width = 250;
 
                     CheckBox checkBox = new CheckBox();
-                    checkBox.Location = new Point(currentX + label.Width + 15, currentY);
+                    checkBox.Location = new Point(currentX + label.Width + 7, currentY);
                     checkBox.Checked = true;
                     checkBox.Tag = "cb-" + statementCount;
 
@@ -151,7 +152,7 @@ namespace Dbmain2AccessImport
             }
             else
             {
-                MessageBox.Show(this,String.Join("\n",errors.ToArray()), "Des erreurs sont survenues, opération annulée (vous pouvez décocher l'instruction et rééssayer)");
+                MessageBox.Show(this,"Les requêtes suivantes ont échoué (vous pouvez réessayer en décochant les instructions problématiques) :\n\n"+String.Join("\n\n",errors.ToArray()), "Erreurs");
             }
         }
 
