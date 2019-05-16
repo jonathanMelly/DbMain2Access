@@ -86,12 +86,20 @@ namespace Dbmain2AccessImport
                     Label label = new Label();
 
                     label.Location = new Point(currentX, currentY);
+<<<<<<< HEAD
                     label.Text = String.Join(" ", statement.Split(' ').Take(3))+" ...";
+=======
+                    label.Text = String.Join(" ", statements[statementCount].Split(' ').Take(3))+" ...";
+>>>>>>> ec38e2d73010739638b9c3185e564596a98423ce
                     label.Width = 250;
 
                     CheckBox checkBox = new CheckBox();
                     checkBox.Location = new Point(currentX + label.Width + 7, currentY);
+<<<<<<< HEAD
                     checkBox.Checked = IsConsideredACompatibleStatement(statement);
+=======
+                    checkBox.Checked = true;
+>>>>>>> ec38e2d73010739638b9c3185e564596a98423ce
                     checkBox.Tag = "cb-" + statementCount;
 
                     importStatements.Add(statement);
